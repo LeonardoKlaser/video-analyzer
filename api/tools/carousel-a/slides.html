@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  .slide {
+    width: 1080px;
+    height: 1920px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 80px;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Slide 1 - Hook de dor */
+  .slide-1 {
+    background: linear-gradient(160deg, #0a0a0f 0%, #1a1a2e 50%, #16213e 100%);
+  }
+  .slide-1 .text {
+    font-size: 82px;
+    font-weight: 900;
+    color: #ffffff;
+    text-align: center;
+    line-height: 1.2;
+    letter-spacing: -1px;
+  }
+  .slide-1 .emoji {
+    font-size: 120px;
+    margin-bottom: 60px;
+  }
+
+  /* Slide 2 - Agrava a dor */
+  .slide-2 {
+    background: linear-gradient(160deg, #0a0a0f 0%, #1a1a2e 50%, #0f0f1a 100%);
+  }
+  .slide-2 .list {
+    font-size: 62px;
+    font-weight: 600;
+    color: #a0a0b0;
+    text-align: left;
+    line-height: 1.8;
+  }
+  .slide-2 .list .highlight {
+    color: #ffffff;
+    font-weight: 800;
+  }
+  .slide-2 .browser-mockup {
+    width: 900px;
+    height: 500px;
+    background: #1e1e2e;
+    border-radius: 20px;
+    margin-bottom: 60px;
+    border: 2px solid #2a2a3e;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+  .slide-2 .browser-tabs {
+    height: 60px;
+    background: #15151f;
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+    gap: 8px;
+  }
+  .slide-2 .tab {
+    height: 36px;
+    background: #2a2a3e;
+    border-radius: 8px 8px 0 0;
+    padding: 0 16px;
+    display: flex;
+    align-items: center;
+    font-size: 18px;
+    color: #666;
+  }
+  .slide-2 .tab.active {
+    background: #1e1e2e;
+    color: #aaa;
+  }
+
+  /* Slide 3 - Ponto de virada */
+  .slide-3 {
+    background: linear-gradient(160deg, #1a0a0a 0%, #2e1a1a 50%, #0f0a0a 100%);
+  }
+  .slide-3 .text {
+    font-size: 76px;
+    font-weight: 900;
+    color: #ffffff;
+    text-align: center;
+    line-height: 1.3;
+  }
+  .slide-3 .text .red {
+    color: #ff4444;
+    font-weight: 900;
+  }
+  .slide-3 .closed-badge {
+    margin-top: 60px;
+    padding: 24px 60px;
+    background: rgba(255, 68, 68, 0.15);
+    border: 3px solid #ff4444;
+    border-radius: 16px;
+    font-size: 48px;
+    font-weight: 800;
+    color: #ff4444;
+    text-transform: uppercase;
+    letter-spacing: 4px;
+  }
+
+  /* Slide 4 - Solucao */
+  .slide-4 {
+    background: linear-gradient(160deg, #0a0f1a 0%, #0f1a2e 50%, #0a1525 100%);
+  }
+  .slide-4 .text {
+    font-size: 68px;
+    font-weight: 800;
+    color: #ffffff;
+    text-align: center;
+    line-height: 1.3;
+    margin-bottom: 80px;
+  }
+  .slide-4 .text .blue {
+    color: #4ea8ff;
+  }
+  .slide-4 .phone-mockup {
+    width: 700px;
+    height: 900px;
+    background: #111;
+    border-radius: 40px;
+    border: 4px solid #333;
+    display: flex;
+    flex-direction: column;
+    padding: 40px;
+    gap: 20px;
+  }
+  .slide-4 .company-row {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 24px;
+    background: #1a1a2e;
+    border-radius: 16px;
+    border-left: 5px solid #4ea8ff;
+  }
+  .slide-4 .company-logo {
+    width: 56px;
+    height: 56px;
+    background: #2a2a3e;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    font-weight: 700;
+    color: #4ea8ff;
+  }
+  .slide-4 .company-info {
+    flex: 1;
+  }
+  .slide-4 .company-name {
+    font-size: 28px;
+    font-weight: 700;
+    color: #fff;
+  }
+  .slide-4 .company-role {
+    font-size: 22px;
+    color: #888;
+    margin-top: 4px;
+  }
+  .slide-4 .match-badge {
+    padding: 8px 16px;
+    background: rgba(78, 168, 255, 0.2);
+    border-radius: 8px;
+    font-size: 20px;
+    font-weight: 700;
+    color: #4ea8ff;
+  }
+  .slide-4 .notif-badge {
+    position: absolute;
+    top: 200px;
+    right: 120px;
+    padding: 16px 32px;
+    background: #4ea8ff;
+    border-radius: 12px;
+    font-size: 26px;
+    font-weight: 700;
+    color: #fff;
+    box-shadow: 0 8px 32px rgba(78, 168, 255, 0.4);
+  }
+
+  /* Slide 5 - Features */
+  .slide-5 {
+    background: linear-gradient(160deg, #0a0f1a 0%, #0f1a2e 50%, #0a1525 100%);
+  }
+  .slide-5 .feature-list {
+    display: flex;
+    flex-direction: column;
+    gap: 50px;
+    width: 100%;
+  }
+  .slide-5 .feature {
+    display: flex;
+    align-items: center;
+    gap: 36px;
+    padding: 40px;
+    background: rgba(78, 168, 255, 0.08);
+    border-radius: 24px;
+    border: 2px solid rgba(78, 168, 255, 0.2);
+  }
+  .slide-5 .feature-icon {
+    font-size: 64px;
+    min-width: 80px;
+    text-align: center;
+  }
+  .slide-5 .feature-text {
+    font-size: 46px;
+    font-weight: 700;
+    color: #ffffff;
+    line-height: 1.3;
+  }
+  .slide-5 .feature-sub {
+    font-size: 34px;
+    color: #888;
+    margin-top: 8px;
+  }
+  .slide-5 .stat {
+    margin-top: 60px;
+    font-size: 54px;
+    font-weight: 900;
+    color: #4ea8ff;
+    text-align: center;
+  }
+
+  /* Slide 6 - CTA */
+  .slide-6 {
+    background: linear-gradient(160deg, #0a0f1a 0%, #16213e 50%, #1a2744 100%);
+  }
+  .slide-6 .logo {
+    font-size: 72px;
+    font-weight: 900;
+    color: #4ea8ff;
+    margin-bottom: 50px;
+    letter-spacing: -2px;
+  }
+  .slide-6 .cta-main {
+    font-size: 88px;
+    font-weight: 900;
+    color: #ffffff;
+    text-align: center;
+    line-height: 1.2;
+    margin-bottom: 50px;
+  }
+  .slide-6 .cta-sub {
+    font-size: 46px;
+    color: #a0a0b0;
+    text-align: center;
+    margin-bottom: 80px;
+  }
+  .slide-6 .cta-button {
+    padding: 36px 80px;
+    background: #4ea8ff;
+    border-radius: 20px;
+    font-size: 44px;
+    font-weight: 800;
+    color: #ffffff;
+    box-shadow: 0 12px 40px rgba(78, 168, 255, 0.4);
+  }
+  .slide-6 .stats-row {
+    display: flex;
+    gap: 60px;
+    margin-top: 80px;
+  }
+  .slide-6 .stat-item {
+    text-align: center;
+  }
+  .slide-6 .stat-number {
+    font-size: 52px;
+    font-weight: 900;
+    color: #4ea8ff;
+  }
+  .slide-6 .stat-label {
+    font-size: 28px;
+    color: #666;
+    margin-top: 8px;
+  }
+</style>
+</head>
+<body>
+
+<!-- SLIDE 1: Hook de dor -->
+<div class="slide slide-1" id="slide1">
+  <div class="emoji">😮‍💨</div>
+  <div class="text">não tá dando conta de procurar emprego todo santo dia?</div>
+</div>
+
+<!-- SLIDE 2: Agrava a dor -->
+<div class="slide slide-2" id="slide2">
+  <div class="browser-mockup">
+    <div class="browser-tabs">
+      <div class="tab">Google Careers</div>
+      <div class="tab">Nubank</div>
+      <div class="tab active">iFood Jobs</div>
+      <div class="tab">Mercado Li...</div>
+      <div class="tab">PicPay</div>
+      <div class="tab">+12</div>
+    </div>
+  </div>
+  <div class="list">
+    <span class="highlight">15 sites</span> pra abrir<br><br>
+    <span class="highlight">50 vagas</span> pra ler<br><br>
+    filtrar. aplicar.<br>adaptar currículo...<br><br>
+    <span class="highlight">todo. santo. dia.</span>
+  </div>
+</div>
+
+<!-- SLIDE 3: Ponto de virada -->
+<div class="slide slide-3" id="slide3">
+  <div class="text">e quando você finalmente acha a vaga perfeita...</div>
+  <div class="closed-badge">VAGA ENCERRADA</div>
+  <div class="text" style="margin-top: 60px; font-size: 52px; color: #888;">500 pessoas aplicaram antes de você</div>
+</div>
+
+<!-- SLIDE 4: Solucao - ScrapJobs -->
+<div class="slide slide-4" id="slide4">
+  <div class="text">e se existisse um <span class="blue">radar</span> que monitora <span class="blue">101 empresas</span> 24h?</div>
+  <div class="phone-mockup">
+    <div class="company-row">
+      <div class="company-logo">G</div>
+      <div class="company-info">
+        <div class="company-name">Google</div>
+        <div class="company-role">Senior Backend Engineer - Remote</div>
+      </div>
+      <div class="match-badge">92%</div>
+    </div>
+    <div class="company-row">
+      <div class="company-logo">N</div>
+      <div class="company-info">
+        <div class="company-name">Nubank</div>
+        <div class="company-role">Staff Software Engineer</div>
+      </div>
+      <div class="match-badge">87%</div>
+    </div>
+    <div class="company-row">
+      <div class="company-logo">iF</div>
+      <div class="company-info">
+        <div class="company-name">iFood</div>
+        <div class="company-role">SRE Engineer - Hybrid</div>
+      </div>
+      <div class="match-badge">85%</div>
+    </div>
+    <div class="company-row">
+      <div class="company-logo">S</div>
+      <div class="company-info">
+        <div class="company-name">Spotify</div>
+        <div class="company-role">Platform Engineer - EU Remote</div>
+      </div>
+      <div class="match-badge">81%</div>
+    </div>
+  </div>
+  <div class="notif-badge">🔔 Nova vaga — 2min atrás</div>
+</div>
+
+<!-- SLIDE 5: Features -->
+<div class="slide slide-5" id="slide5">
+  <div class="feature-list">
+    <div class="feature">
+      <div class="feature-icon">🔔</div>
+      <div>
+        <div class="feature-text">Alerta em tempo real</div>
+        <div class="feature-sub">Seja o primeiro a aplicar</div>
+      </div>
+    </div>
+    <div class="feature">
+      <div class="feature-icon">🤖</div>
+      <div>
+        <div class="feature-text">IA otimiza seu currículo</div>
+        <div class="feature-sub">Passa no filtro ATS automático</div>
+      </div>
+    </div>
+    <div class="feature">
+      <div class="feature-icon">🎯</div>
+      <div>
+        <div class="feature-text">Match com seu perfil</div>
+        <div class="feature-sub">Só vagas relevantes pra você</div>
+      </div>
+    </div>
+    <div class="feature">
+      <div class="feature-icon">📊</div>
+      <div>
+        <div class="feature-text">101 empresas monitoradas</div>
+        <div class="feature-sub">Google, Nubank, iFood, Spotify...</div>
+      </div>
+    </div>
+  </div>
+  <div class="stat">38.000+ vagas mapeadas</div>
+</div>
+
+<!-- SLIDE 6: CTA -->
+<div class="slide slide-6" id="slide6">
+  <div class="logo">ScrapJobs</div>
+  <div class="cta-main">7 dias grátis</div>
+  <div class="cta-sub">busca "ScrapJobs" na bio</div>
+  <div class="cta-button">Comece agora</div>
+  <div class="stats-row">
+    <div class="stat-item">
+      <div class="stat-number">101</div>
+      <div class="stat-label">empresas</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-number">38k+</div>
+      <div class="stat-label">vagas</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-number">24/7</div>
+      <div class="stat-label">monitorando</div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

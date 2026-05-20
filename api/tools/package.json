@@ -1,0 +1,14 @@
+{
+  "name": "video-analyzer-tools",
+  "version": "1.0.0",
+  "description": "Video analysis tools",
+  "scripts": {
+    "analyze": "node analyze-video.js"
+  },
+  "dependencies": {
+    "@google-cloud/speech": "^7.3.1",
+    "@google-cloud/storage": "^7.0.0",
+    "@google-cloud/video-intelligence": "^5.0.0",
+    "ffmpeg-static": "^5.3.0"
+  }
+}

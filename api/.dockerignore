@@ -1,0 +1,9 @@
+.git
+testdata
+*.log
+node_modules
+.env
+.env.*
+coverage.*
+tools/outputs
+tools/carousel-a
