@@ -73,15 +73,15 @@ func (r *Runner) Run(ctx context.Context, id uuid.UUID) {
 
 	result, err := claude.ParseResult(raw)
 	if err != nil {
-		slog.Warn("job: claude json invalid, retrying", "id", id, "err", err)
-		reinforced := user + "\n\nLEMBRETE: responda APENAS em JSON puro, sem markdown, sem texto antes ou depois. Sua resposta anterior foi rejeitada por não ser JSON válido."
-		raw, err = r.Claude.Analyze(jobCtx, claude.SystemPrompt(), reinforced)
+		slog.Warn("job: claude json invalid, retrying", "id", id, "err", err, "raw_prefix", string(raw[:min(len(raw), 200)]))
+		raw, err = r.Claude.Analyze(jobCtx, claude.SystemPrompt(), user+"\n\nATENÇÃO: sua resposta anterior foi rejeitada por não ser JSON válido. Responda APENAS o objeto JSON, sem markdown, sem texto adicional.")
 		if err != nil {
 			_ = db.SetError(jobCtx, r.DB, id, "Falha ao gerar insights. Tente novamente.")
 			return
 		}
 		result, err = claude.ParseResult(raw)
 		if err != nil {
+			slog.Error("job: claude json invalid after retry", "id", id, "err", err, "raw_prefix", string(raw[:min(len(raw), 200)]))
 			_ = db.SetError(jobCtx, r.DB, id, "Resposta da IA inválida após nova tentativa.")
 			return
 		}

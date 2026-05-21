@@ -62,7 +62,7 @@ type anthropicResponse struct {
 func (c *Client) Analyze(ctx context.Context, system, user string) ([]byte, error) {
 	body, _ := json.Marshal(anthropicRequest{
 		Model:     c.model,
-		MaxTokens: 4096,
+		MaxTokens: 8192,
 		System:    system,
 		Messages:  []reqMessage{{Role: "user", Content: user}},
 	})
