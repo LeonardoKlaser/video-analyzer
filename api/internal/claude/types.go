@@ -21,11 +21,13 @@ type Result struct {
 		DominantLabels []string `json:"dominant_labels"`
 	} `json:"visual_analysis"`
 
-	KeyInsights       []string `json:"key_insights"`
-	ActionItems       []string `json:"action_items"`
-	ReplicationScript string   `json:"replication_script,omitempty"`
-	Verdict           string   `json:"verdict"`
-	VerdictReason     string   `json:"verdict_reason"`
+	KeyInsights        []string `json:"key_insights"`
+	ActionItems        []string `json:"action_items"`
+	ReplicationScript  string   `json:"replication_script,omitempty"`
+	NeuromarketingRefs []string `json:"neuromarketing_refs,omitempty"`
+	ViralElements      []string `json:"viral_elements,omitempty"`
+	Verdict            string   `json:"verdict"`
+	VerdictReason      string   `json:"verdict_reason"`
 }
 
 func (r *Result) AsRaw() (json.RawMessage, error) {

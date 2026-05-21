@@ -19,9 +19,17 @@ func modeDescription(m models.Mode) string {
 	case models.ModePrePost:
 		return "Vídeo ainda não postado. Avalie se vale postar como está. Foco: hook nos primeiros 3s, estrutura, ritmo de corte, CTA. Pergunta central: 'vale a pena postar?'."
 	case models.ModeReference:
-		return "Vídeo viral de terceiro pra usar como referência. Foco: por que viralizou + como replicar no contexto do usuário. Inclua um replication_script com roteiro adaptado."
+		return `Vídeo viral de terceiro usado como referência. Analise em três camadas:
+
+1. POR QUE VIRALIZOU — identifique os mecanismos psicológicos e de neuromarketing que explicam a performance (ex: loop aberto, prova social, contraste, escassez, identidade tribal). Seja específico: qual frame/fala ativa cada princípio.
+
+2. ELEMENTOS VIRAIS — liste os elementos concretos replicáveis (estrutura de hook, ritmo de corte, tipo de abertura, uso de texto na tela, CTA implícito/explícito).
+
+3. ROTEIRO PERSONALIZADO — usando o conceito declarado pelo usuário e o contexto do negócio dele, escreva um roteiro completo que incorpora os elementos virais identificados. Justifique cada escolha estrutural com o princípio de neuromarketing correspondente.
+
+Os campos neuromarketing_refs, viral_elements e replication_script são OBRIGATÓRIOS neste modo.`
 	case models.ModePostMortem:
-		return "Vídeo já postado. Diagnóstico do que funcionou ou não. Compare métricas com benchmarks (Caso 4 do system prompt). Foco: aprendizado pra próximos."
+		return `Vídeo já postado. Diagnóstico do que funcionou ou não. Compare métricas com benchmarks (Caso 4 do system prompt). Foco: aprendizado pra próximos. Para o campo "verdict", use EXCLUSIVAMENTE: "performou bem" | "na média" | "abaixo do esperado".`
 	}
 	return string(m)
 }
@@ -67,15 +75,28 @@ Estrutura obrigatória (campos com nomes EXATOS):
   "key_insights": ["...", "...", "..."],
   "action_items": ["...", "..."],
   "replication_script": "...",
-  "verdict": "vai bombar" | "ok" | "vai flopar",
+  "neuromarketing_refs": ["..."],
+  "viral_elements": ["..."],
+  "verdict": "vai bombar" | "ok" | "vai flopar" | "performou bem" | "na média" | "abaixo do esperado",
   "verdict_reason": "..."
 }`
 
-func BuildUserMessage(mode models.Mode, bc models.BusinessContext, metrics *models.Metrics, gvi json.RawMessage) string {
+func BuildUserMessage(mode models.Mode, bc models.BusinessContext, metrics *models.Metrics, gvi json.RawMessage, userConcept string) string {
 	platforms := strings.Join(bc.Platforms, ", ")
 	if platforms == "" {
 		platforms = "(não informadas)"
 	}
+
+	conceptSection := ""
+	if userConcept != "" {
+		switch mode {
+		case models.ModeReference:
+			conceptSection = fmt.Sprintf("\n## Conceito que o criador quer gravar\n%s\n", userConcept)
+		case models.ModePrePost:
+			conceptSection = fmt.Sprintf("\n## Conceito/gancho planejado pelo criador\n%s\nAvalie se o hook executado bate com essa intenção.\n", userConcept)
+		}
+	}
+
 	return fmt.Sprintf(`## Contexto do negócio
 - Marca: %s
 - O que faz: %s
@@ -89,7 +110,7 @@ func BuildUserMessage(mode models.Mode, bc models.BusinessContext, metrics *mode
 
 ## Métricas
 %s
-
+%s
 ## Dados extraídos do vídeo (Google Video Intelligence)
 %s
 
@@ -105,6 +126,7 @@ func BuildUserMessage(mode models.Mode, bc models.BusinessContext, metrics *mode
 		modeDescription(mode),
 		string(mode),
 		formatMetrics(metrics, mode),
+		conceptSection,
 		string(gvi),
 		outputSchemaInstruction,
 	)

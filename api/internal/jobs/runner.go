@@ -63,7 +63,7 @@ func (r *Runner) Run(ctx context.Context, id uuid.UUID) {
 		slog.Error("job: update progress 2", "id", id, "err", err)
 	}
 
-	user := claude.BuildUserMessage(a.Mode, a.BusinessContext, a.MetricsInput, gvi)
+	user := claude.BuildUserMessage(a.Mode, a.BusinessContext, a.MetricsInput, gvi, a.UserConcept)
 	raw, err := r.Claude.Analyze(jobCtx, claude.SystemPrompt(), user)
 	if err != nil {
 		slog.Error("job: claude failed", "id", id, "err", err)
