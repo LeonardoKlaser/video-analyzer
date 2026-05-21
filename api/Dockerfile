@@ -5,7 +5,6 @@ RUN apk add --no-cache git
 COPY go.mod go.sum ./
 RUN go mod download
 COPY . .
-RUN ls -la && ls cmd/ 2>/dev/null || echo "NO CMD DIR"
 RUN CGO_ENABLED=0 GOOS=linux go build -o /server ./cmd/server
 
 # Runtime stage (Node sidecar + Go binary)

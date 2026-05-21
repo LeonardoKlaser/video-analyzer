@@ -211,7 +211,7 @@ function ErrorBanner({ msg, onBack }: { msg: string; onBack: () => void }) {
         onClick={onBack}
         className="text-xs font-mono uppercase tracking-wider text-rose-300 hover:text-rose-200 underline"
       >
-        <- nova análise
+        ← nova análise
       </button>
     </div>
   );
