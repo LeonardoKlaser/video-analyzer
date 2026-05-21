@@ -191,7 +191,7 @@ export default function App() {
           {view.kind === 'running' && <AnalysisRunning progressMsg={view.progressMsg} />}
 
           {view.kind === 'result' && view.status.status === 'done' && view.status.result && (
-            <AnalysisResult result={view.status.result} />
+            <AnalysisResult result={view.status.result} mode={view.status.mode} />
           )}
 
           {view.kind === 'result' && view.status.status === 'error' && (
