@@ -28,6 +28,7 @@ type startRequest struct {
 	Mode            string                 `json:"mode"`
 	BusinessContext models.BusinessContext `json:"business_context"`
 	Metrics         *models.Metrics        `json:"metrics,omitempty"`
+	UserConcept     string                 `json:"user_concept,omitempty"`
 }
 
 func (h *AnalyzeHandler) Start(w http.ResponseWriter, r *http.Request) {
@@ -49,6 +50,7 @@ func (h *AnalyzeHandler) Start(w http.ResponseWriter, r *http.Request) {
 		UserID:          userIDFromCtx(r),
 		BusinessContext: req.BusinessContext,
 		MetricsInput:    req.Metrics,
+		UserConcept:     req.UserConcept,
 	}
 	if err := db.Insert(r.Context(), h.DB, a); err != nil {
 		writeError(w, http.StatusInternalServerError, "failed to create analysis: "+err.Error())
@@ -75,26 +77,6 @@ func (h *AnalyzeHandler) validate(req *startRequest) error {
 	case "pre_post", "reference", "post_mortem":
 	default:
 		return fmt.Errorf("mode must be pre_post|reference|post_mortem (got %q)", req.Mode)
-	}
-	bc := req.BusinessContext
-	missing := []string{}
-	if strings.TrimSpace(bc.BrandName) == "" {
-		missing = append(missing, "brand_name")
-	}
-	if strings.TrimSpace(bc.Description) == "" {
-		missing = append(missing, "description")
-	}
-	if strings.TrimSpace(bc.TargetAudience) == "" {
-		missing = append(missing, "target_audience")
-	}
-	if strings.TrimSpace(bc.MainPain) == "" {
-		missing = append(missing, "main_pain")
-	}
-	if strings.TrimSpace(bc.ContentHistory) == "" {
-		missing = append(missing, "content_history")
-	}
-	if len(missing) > 0 {
-		return fmt.Errorf("business_context missing: %s", strings.Join(missing, ", "))
 	}
 	if req.Metrics != nil && req.Mode != "post_mortem" && req.Mode != "reference" {
 		return fmt.Errorf("metrics only allowed when mode = post_mortem or reference")

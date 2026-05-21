@@ -14,11 +14,10 @@ func TestStart_ValidationErrors(t *testing.T) {
 		want string
 	}{
 		{"empty body", ``, "invalid JSON"},
-		{"missing gcs_uri", `{"mode":"pre_post","business_context":{"brand_name":"a","description":"b","target_audience":"c","main_pain":"d","content_history":"e"}}`, "gcs_uri"},
-		{"wrong bucket", `{"gcs_uri":"gs://other-bucket/x.mp4","mode":"pre_post","business_context":{"brand_name":"a","description":"b","target_audience":"c","main_pain":"d","content_history":"e"}}`, "gcs_uri"},
-		{"bad mode", `{"gcs_uri":"gs://video-analyzer-tmp/x.mp4","mode":"weird","business_context":{"brand_name":"a","description":"b","target_audience":"c","main_pain":"d","content_history":"e"}}`, "mode"},
-		{"empty business_context.brand_name", `{"gcs_uri":"gs://video-analyzer-tmp/x.mp4","mode":"pre_post","business_context":{"description":"b","target_audience":"c","main_pain":"d","content_history":"e"}}`, "brand_name"},
-		{"metrics without post_mortem", `{"gcs_uri":"gs://video-analyzer-tmp/x.mp4","mode":"pre_post","business_context":{"brand_name":"a","description":"b","target_audience":"c","main_pain":"d","content_history":"e"},"metrics":{"views":1}}`, "metrics"},
+		{"missing gcs_uri", `{"mode":"pre_post","business_context":{}}`, "gcs_uri"},
+		{"wrong bucket", `{"gcs_uri":"gs://other-bucket/x.mp4","mode":"pre_post","business_context":{}}`, "gcs_uri"},
+		{"bad mode", `{"gcs_uri":"gs://video-analyzer-tmp/x.mp4","mode":"weird","business_context":{}}`, "mode"},
+		{"metrics without post_mortem", `{"gcs_uri":"gs://video-analyzer-tmp/x.mp4","mode":"pre_post","business_context":{},"metrics":{"views":1}}`, "metrics"},
 	}
 	h := &AnalyzeHandler{Bucket: "video-analyzer-tmp"}
 	for _, tc := range cases {
