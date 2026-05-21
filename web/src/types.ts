@@ -43,6 +43,7 @@ export interface StartAnalyzeRequest {
   mode: Mode;
   business_context: BusinessContext;
   metrics?: Metrics;
+  user_concept?: string;
 }
 
 export interface AnalysisStatus {
@@ -63,7 +64,12 @@ export interface ClaudeResult {
   key_insights: string[];
   action_items: string[];
   replication_script?: string;
-  verdict: 'vai bombar' | 'ok' | 'vai flopar' | string;
+  neuromarketing_refs?: string[];
+  viral_elements?: string[];
+  verdict:
+    | 'vai bombar' | 'ok' | 'vai flopar'
+    | 'performou bem' | 'na média' | 'abaixo do esperado'
+    | string;
   verdict_reason: string;
 }
 
