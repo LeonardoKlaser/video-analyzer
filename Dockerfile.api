@@ -1,0 +1,17 @@
+FROM golang:1.22-alpine AS gobuild
+WORKDIR /app
+RUN apk add --no-cache git
+COPY api/go.mod api/go.sum ./
+RUN go mod download
+COPY api/ .
+RUN CGO_ENABLED=0 GOOS=linux go build -o /server ./cmd/server
+
+FROM node:20-alpine
+WORKDIR /app
+COPY api/tools/package*.json ./tools/
+RUN cd tools && npm ci --omit=dev
+COPY api/tools/analyze-video.js ./tools/
+COPY --from=gobuild /server /server
+ENV ANALYZE_VIDEO_SCRIPT=/app/tools/analyze-video.js
+EXPOSE 8080
+CMD ["/server"]
