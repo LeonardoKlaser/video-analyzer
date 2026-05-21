@@ -29,7 +29,7 @@ func NewClient(apiKey, model, endpoint string) *Client {
 		apiKey:     apiKey,
 		model:      model,
 		endpoint:   endpoint,
-		httpClient: &http.Client{Timeout: 90 * time.Second},
+		httpClient: &http.Client{Timeout: 4 * time.Minute},
 		retryDelay: 5 * time.Second,
 	}
 }
