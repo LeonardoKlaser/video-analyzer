@@ -47,3 +47,6 @@ CREATE INDEX IF NOT EXISTS idx_analyses_status_updated
 
 CREATE INDEX IF NOT EXISTS idx_analyses_user_id
   ON analyses (user_id, created_at DESC);
+
+-- migrate: add user_concept for async job runner access
+ALTER TABLE analyses ADD COLUMN IF NOT EXISTS user_concept TEXT;

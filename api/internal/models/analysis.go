@@ -49,6 +49,7 @@ type Analysis struct {
 	UserID          uuid.UUID       `json:"-"`
 	BusinessContext BusinessContext `json:"business_context"`
 	MetricsInput    *Metrics        `json:"metrics_input,omitempty"`
+	UserConcept     string          `json:"user_concept,omitempty"`
 	GVIResult       json.RawMessage `json:"gvi_result,omitempty"`
 	ClaudeResult    json.RawMessage `json:"claude_result,omitempty"`
 	ProgressMsg     string          `json:"progress_msg,omitempty"`

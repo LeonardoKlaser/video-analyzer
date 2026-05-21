@@ -25,11 +25,15 @@ func Insert(ctx context.Context, d *DB, a *models.Analysis) error {
 	if a.UserID != uuid.Nil {
 		userID = &a.UserID
 	}
+	var userConcept *string
+	if a.UserConcept != "" {
+		userConcept = &a.UserConcept
+	}
 	row := d.QueryRow(ctx, `
-		INSERT INTO analyses (status, mode, gcs_uri, original_name, user_id, business_context, metrics_input)
-		VALUES ($1, $2, $3, $4, $5, $6, $7)
+		INSERT INTO analyses (status, mode, gcs_uri, original_name, user_id, business_context, metrics_input, user_concept)
+		VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
 		RETURNING id, created_at, updated_at`,
-		a.Status, a.Mode, a.GCSURI, a.OriginalName, userID, bc, mi,
+		a.Status, a.Mode, a.GCSURI, a.OriginalName, userID, bc, mi, userConcept,
 	)
 	return row.Scan(&a.ID, &a.CreatedAt, &a.UpdatedAt)
 }
@@ -40,6 +44,7 @@ func Get(ctx context.Context, d *DB, id uuid.UUID) (*models.Analysis, error) {
 		       business_context, metrics_input,
 		       gvi_result, claude_result,
 		       COALESCE(progress_msg,''), COALESCE(error_msg,''),
+		       COALESCE(user_concept,''),
 		       created_at, updated_at, completed_at
 		FROM analyses WHERE id = $1`, id)
 
@@ -51,6 +56,7 @@ func Get(ctx context.Context, d *DB, id uuid.UUID) (*models.Analysis, error) {
 		&bc, &mi,
 		&a.GVIResult, &a.ClaudeResult,
 		&a.ProgressMsg, &a.ErrorMsg,
+		&a.UserConcept,
 		&a.CreatedAt, &a.UpdatedAt, &a.CompletedAt,
 	); err != nil {
 		return nil, err
