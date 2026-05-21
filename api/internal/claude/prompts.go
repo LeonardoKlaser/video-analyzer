@@ -64,14 +64,26 @@ func formatMetrics(m *models.Metrics, mode models.Mode) string {
 }
 
 const outputSchemaInstruction = `Responda APENAS em JSON válido, sem texto antes ou depois, sem markdown.
-Os dados do vídeo incluem:
-- "speech": transcrição de áudio via Whisper. Use "speech.hookText" para analisar o hook verbal nos primeiros 5s e "speech.fullTranscript" para avaliar estrutura narrativa, CTA e ritmo. Se null, o vídeo não tem fala detectável.
-- "textDetection": texto visível na tela (overlays, legendas, CTAs visuais). Use "textDetection.hookTexts" para analisar o hook textual nos primeiros 5s.
-Estrutura obrigatória (campos com nomes EXATOS):
+
+## Como identificar o hook
+Os dados do vídeo incluem duas fontes de informação sobre os primeiros segundos:
+- "speech": transcrição de áudio via Google Speech-to-Text pt-BR. "speech.hookText" contém as palavras faladas nos primeiros 8s. "speech.fullTranscript" cobre o vídeo inteiro. Se speech for null ou hookText for null, não há fala detectável.
+- "textDetection.hookTexts": textos sobrepostos na tela detectados nos primeiros 8s.
+
+O gancho real é frequentemente a interseção ou complemento entre o que é FALADO e o que está ESCRITO NA TELA simultaneamente nos primeiros 5-8s. Se speech.hookText e textDetection.hookTexts se sobrepõem em tema ou palavras, esse é o gancho. Priorize speech.hookText quando disponível — é o que o viewer ouve primeiro.
+
+## Regra absoluta para visual_analysis
+NUNCA inclua nomes técnicos de labels de visão computacional (ex: "desktop computer", "facial expression", "font", "screenshot") diretamente na análise. Esses são dados brutos internos. Sempre traduza para o que o VIEWER vê e experimenta: "O vídeo passa X segundos mostrando apenas a tela do computador sem rosto, criando risco de queda de atenção nesse trecho" — não "labels: desktop computer, flat panel display".
+
+## Estrutura obrigatória (campos com nomes EXATOS):
 {
   "hook_analysis": { "score": 1-10, "why": "...", "improvement": "..." },
   "structure_analysis": { "framework_match": "...", "retention_issues": ["..."] },
-  "visual_analysis": { "rhythm": "...", "first_frame": "...", "dominant_labels": ["..."] },
+  "visual_analysis": {
+    "rhythm": "descrição do ritmo de cortes e o que isso significa para retenção (ex: 'Ritmo lento: média de 14s por shot, bem abaixo do mínimo de 3s para TikTok. O shot entre 7s-33s mostra apenas texto sem rosto, risco alto de abandono.')",
+    "first_frame": "o que o viewer vê e sente no primeiro segundo — elementos presentes e impacto no CTR",
+    "dominant_visual": "o que domina visualmente a maior parte do vídeo e o que isso significa para engajamento"
+  },
   "key_insights": ["...", "...", "..."],
   "action_items": ["...", "..."],
   "replication_script": "...",

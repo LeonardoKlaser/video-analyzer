@@ -16,9 +16,9 @@ type Result struct {
 	} `json:"structure_analysis"`
 
 	VisualAnalysis struct {
-		Rhythm         string   `json:"rhythm"`
-		FirstFrame     string   `json:"first_frame"`
-		DominantLabels []string `json:"dominant_labels"`
+		Rhythm         string `json:"rhythm"`
+		FirstFrame     string `json:"first_frame"`
+		DominantVisual string `json:"dominant_visual"`
 	} `json:"visual_analysis"`
 
 	KeyInsights        []string `json:"key_insights"`

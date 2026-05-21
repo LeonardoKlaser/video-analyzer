@@ -23,7 +23,7 @@ func TestClient_Analyze_Happy(t *testing.T) {
 		capturedBody = string(body)
 		w.Header().Set("Content-Type", "application/json")
 		_, _ = w.Write([]byte(`{
-			"content": [{"type":"text","text":"{\"hook_analysis\":{\"score\":7,\"why\":\"w\",\"improvement\":\"i\"},\"structure_analysis\":{\"framework_match\":\"x\",\"retention_issues\":[]},\"visual_analysis\":{\"rhythm\":\"fast\",\"first_frame\":\"y\",\"dominant_labels\":[]},\"key_insights\":[\"a\"],\"action_items\":[\"a\"],\"verdict\":\"ok\",\"verdict_reason\":\"r\"}"}]
+			"content": [{"type":"text","text":"{\"hook_analysis\":{\"score\":7,\"why\":\"w\",\"improvement\":\"i\"},\"structure_analysis\":{\"framework_match\":\"x\",\"retention_issues\":[]},\"visual_analysis\":{\"rhythm\":\"fast\",\"first_frame\":\"y\",\"dominant_visual\":\"\"},\"key_insights\":[\"a\"],\"action_items\":[\"a\"],\"verdict\":\"ok\",\"verdict_reason\":\"r\"}"}]
 		}`))
 	}))
 	defer server.Close()
@@ -54,7 +54,7 @@ func TestClient_Analyze_RetriesOnceOn5xx(t *testing.T) {
 			http.Error(w, "boom", http.StatusInternalServerError)
 			return
 		}
-		_, _ = w.Write([]byte(`{"content":[{"type":"text","text":"{\"verdict\":\"ok\",\"verdict_reason\":\"\",\"hook_analysis\":{\"score\":1,\"why\":\"w\",\"improvement\":\"\"},\"structure_analysis\":{\"framework_match\":\"\",\"retention_issues\":[]},\"visual_analysis\":{\"rhythm\":\"\",\"first_frame\":\"\",\"dominant_labels\":[]},\"key_insights\":[\"a\"],\"action_items\":[\"a\"]}"}]}`))
+		_, _ = w.Write([]byte(`{"content":[{"type":"text","text":"{\"verdict\":\"ok\",\"verdict_reason\":\"\",\"hook_analysis\":{\"score\":1,\"why\":\"w\",\"improvement\":\"\"},\"structure_analysis\":{\"framework_match\":\"\",\"retention_issues\":[]},\"visual_analysis\":{\"rhythm\":\"\",\"first_frame\":\"\",\"dominant_visual\":\"\"},\"key_insights\":[\"a\"],\"action_items\":[\"a\"]}"}]}`))
 	}))
 	defer server.Close()
 

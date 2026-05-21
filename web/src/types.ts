@@ -60,7 +60,7 @@ export interface AnalysisStatus {
 export interface ClaudeResult {
   hook_analysis: { score: number; why: string; improvement: string };
   structure_analysis: { framework_match: string; retention_issues: string[] };
-  visual_analysis: { rhythm: string; first_frame: string; dominant_labels: string[] };
+  visual_analysis: { rhythm: string; first_frame: string; dominant_visual: string };
   key_insights: string[];
   action_items: string[];
   replication_script?: string;

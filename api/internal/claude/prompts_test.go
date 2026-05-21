@@ -97,7 +97,7 @@ func TestParseResult_Happy(t *testing.T) {
 	raw := []byte(`{
 	  "hook_analysis": {"score": 8, "why": "x", "improvement": "y"},
 	  "structure_analysis": {"framework_match": "hook→...", "retention_issues": ["a"]},
-	  "visual_analysis": {"rhythm": "fast", "first_frame": "x", "dominant_labels": ["a"]},
+	  "visual_analysis": {"rhythm": "fast", "first_frame": "x", "dominant_visual": "a"},
 	  "key_insights": ["a","b","c"],
 	  "action_items": ["a","b"],
 	  "verdict": "ok",
@@ -120,7 +120,7 @@ func TestParseResult_WithNeuromarketing(t *testing.T) {
 	raw := []byte(`{
 	  "hook_analysis": {"score": 9, "why": "x", "improvement": "y"},
 	  "structure_analysis": {"framework_match": "a", "retention_issues": []},
-	  "visual_analysis": {"rhythm": "fast", "first_frame": "x", "dominant_labels": []},
+	  "visual_analysis": {"rhythm": "fast", "first_frame": "x", "dominant_visual": ""},
 	  "key_insights": ["a"],
 	  "action_items": ["a"],
 	  "neuromarketing_refs": ["Loop aberto", "Prova social"],

@@ -134,15 +134,20 @@ async function transcribeWithSpeechToText(uri) {
   const tmpMp4 = path.join(os.tmpdir(), `va-${Date.now()}.mp4`);
   const tmpFlac = tmpMp4.replace('.mp4', '.flac');
 
+  // 1. Parse bucket from GCS URI
+  const withoutScheme = uri.replace('gs://', '');
+  const slashIdx = withoutScheme.indexOf('/');
+  const bucketName = withoutScheme.slice(0, slashIdx);
+  const objectName = withoutScheme.slice(slashIdx + 1);
+
+  const flacGCSObject = `speech-tmp/${Date.now()}.flac`;
+  const flacGCSUri = `gs://${bucketName}/${flacGCSObject}`;
+
   try {
-    // 1. Download video from GCS
-    const withoutScheme = uri.replace('gs://', '');
-    const slashIdx = withoutScheme.indexOf('/');
-    const bucketName = withoutScheme.slice(0, slashIdx);
-    const objectName = withoutScheme.slice(slashIdx + 1);
+    // 2. Download video from GCS
     await storage.bucket(bucketName).file(objectName).download({ destination: tmpMp4 });
 
-    // 2. Extract audio to FLAC (16kHz mono — ideal para Speech-to-Text)
+    // 3. Extract audio to FLAC (16kHz mono — ideal para Speech-to-Text)
     execFileSync(ffmpegPath, [
       '-i', tmpMp4,
       '-ar', '16000',
@@ -152,11 +157,12 @@ async function transcribeWithSpeechToText(uri) {
       tmpFlac,
     ], { stdio: 'pipe' });
 
-    // 3. Send to Google Speech-to-Text pt-BR
-    const audioBytes = fs.readFileSync(tmpFlac).toString('base64');
+    // 4. Upload FLAC to GCS — inline base64 falha para vídeos > 60s
+    await storage.bucket(bucketName).upload(tmpFlac, { destination: flacGCSObject });
 
+    // 5. Send to Google Speech-to-Text pt-BR via GCS URI
     const [operation] = await speechClient.longRunningRecognize({
-      audio: { content: audioBytes },
+      audio: { uri: flacGCSUri },
       config: {
         encoding: 'FLAC',
         sampleRateHertz: 16000,
@@ -212,6 +218,7 @@ async function transcribeWithSpeechToText(uri) {
   } finally {
     try { fs.unlinkSync(tmpMp4); } catch {}
     try { fs.unlinkSync(tmpFlac); } catch {}
+    try { await storage.bucket(bucketName).file(flacGCSObject).delete(); } catch {}
   }
 }
 

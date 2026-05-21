@@ -69,14 +69,7 @@ export function AnalysisResult({ result, mode }: Props) {
       <Section title="Análise visual" accent="sky">
         <dl className="text-sm space-y-2">
           <Row label="Primeiro frame" value={result.visual_analysis.first_frame} />
-          <Row
-            label="Labels dominantes"
-            value={
-              <span className="font-mono text-xs">
-                {result.visual_analysis.dominant_labels.join(' · ')}
-              </span>
-            }
-          />
+          <Row label="Visual dominante" value={result.visual_analysis.dominant_visual} />
         </dl>
       </Section>
 
