@@ -1,33 +1,25 @@
-import type { ClaudeResult } from '../types';
+import type { ClaudeResult, Mode } from '../types';
 
 interface Props {
   result: ClaudeResult;
+  mode?: Mode;
 }
 
 const VERDICT_STYLE: Record<string, { bg: string; ring: string; icon: string }> = {
-  'vai bombar': {
-    bg: 'bg-emerald-500 text-zinc-950',
-    ring: 'ring-emerald-500/40',
-    icon: '↑',
-  },
-  ok: {
-    bg: 'bg-amber-400 text-zinc-950',
-    ring: 'ring-amber-400/40',
-    icon: '→',
-  },
-  'vai flopar': {
-    bg: 'bg-rose-500 text-white',
-    ring: 'ring-rose-500/40',
-    icon: '↓',
-  },
+  'vai bombar':         { bg: 'bg-emerald-500 text-zinc-950', ring: 'ring-emerald-500/40', icon: '↑' },
+  ok:                   { bg: 'bg-amber-400 text-zinc-950',   ring: 'ring-amber-400/40',   icon: '→' },
+  'vai flopar':         { bg: 'bg-rose-500 text-white',       ring: 'ring-rose-500/40',     icon: '↓' },
+  'performou bem':      { bg: 'bg-emerald-500 text-zinc-950', ring: 'ring-emerald-500/40', icon: '↑' },
+  'na média':           { bg: 'bg-amber-400 text-zinc-950',   ring: 'ring-amber-400/40',   icon: '→' },
+  'abaixo do esperado': { bg: 'bg-rose-500 text-white',       ring: 'ring-rose-500/40',     icon: '↓' },
 };
 
-export function AnalysisResult({ result }: Props) {
+export function AnalysisResult({ result, mode }: Props) {
   const style = VERDICT_STYLE[result.verdict] || {
-    bg: 'bg-zinc-600 text-white',
-    ring: 'ring-zinc-600/40',
-    icon: '·',
+    bg: 'bg-zinc-600 text-white', ring: 'ring-zinc-600/40', icon: '·',
   };
+
+  const isReference = mode === 'reference';
 
   return (
     <div className="space-y-6">
@@ -43,7 +35,7 @@ export function AnalysisResult({ result }: Props) {
       <div className="grid grid-cols-3 gap-3">
         <ScoreBlock label="Hook" value={`${result.hook_analysis.score}`} suffix="/10" />
         <InfoBlock label="Ritmo" value={result.visual_analysis.rhythm} />
-        <InfoBlock label="Cortes" value={`${result.structure_analysis.retention_issues.length}`} suffix=" issues" />
+        <InfoBlock label="Issues" value={`${result.structure_analysis.retention_issues.length}`} />
       </div>
 
       <Section title="Hook" accent="emerald">
@@ -87,6 +79,34 @@ export function AnalysisResult({ result }: Props) {
           />
         </dl>
       </Section>
+
+      {isReference && result.neuromarketing_refs && result.neuromarketing_refs.length > 0 && (
+        <Section title="Por que viralizou" accent="violet">
+          <div className="flex flex-wrap gap-2 mb-4">
+            {result.neuromarketing_refs.map((ref, i) => (
+              <span
+                key={i}
+                className="px-2.5 py-1 rounded text-xs bg-violet-500/10 border border-violet-500/20 text-violet-300"
+              >
+                {ref}
+              </span>
+            ))}
+          </div>
+          {result.viral_elements && result.viral_elements.length > 0 && (
+            <>
+              <p className="text-zinc-500 font-mono text-xs uppercase tracking-wider mb-2">elementos replicáveis</p>
+              <ol className="space-y-1.5">
+                {result.viral_elements.map((el, i) => (
+                  <li key={i} className="flex gap-2 text-sm">
+                    <span className="text-violet-400 font-mono shrink-0">{String(i + 1).padStart(2, '0')}</span>
+                    <span>{el}</span>
+                  </li>
+                ))}
+              </ol>
+            </>
+          )}
+        </Section>
+      )}
 
       <Section title="Insights" accent="violet">
         <ul className="space-y-2">
