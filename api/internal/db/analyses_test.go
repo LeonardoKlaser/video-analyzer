@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"testing"
 
+	"github.com/google/uuid"
 	"github.com/leoklaser/video-analyzer/api/internal/models"
 )
 
@@ -103,10 +104,13 @@ func TestMarkDone(t *testing.T) {
 func TestList(t *testing.T) {
 	d := testDB(t)
 	ctx := context.Background()
+	userID := uuid.New()
 	for i := 0; i < 3; i++ {
-		_ = Insert(ctx, d, minimalAnalysis())
+		a := minimalAnalysis()
+		a.UserID = userID
+		_ = Insert(ctx, d, a)
 	}
-	list, err := List(ctx, d, 10)
+	list, err := List(ctx, d, userID, 10)
 	if err != nil {
 		t.Fatalf("List: %v", err)
 	}
