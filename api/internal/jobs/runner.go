@@ -26,7 +26,7 @@ type Runner struct {
 // Run executes the full pipeline for the given analysis id.
 // Designed to be called as `go r.Run(ctx, id)` from the handler.
 func (r *Runner) Run(ctx context.Context, id uuid.UUID) {
-	jobCtx, cancel := context.WithTimeout(context.Background(), 7*time.Minute)
+	jobCtx, cancel := context.WithTimeout(context.Background(), 10*time.Minute)
 	defer cancel()
 
 	a, err := db.Get(jobCtx, r.DB, id)
