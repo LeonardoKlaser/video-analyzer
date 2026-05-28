@@ -21,7 +21,7 @@ func New(scriptPath string) *Runner {
 	return &Runner{
 		ScriptPath: scriptPath,
 		NodeBin:    "node",
-		Timeout:    4 * time.Minute,
+		Timeout:    6 * time.Minute,
 	}
 }
 
